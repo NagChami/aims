@@ -1,0 +1,150 @@
+<div class="shell">
+  <aside class="sidenav" [class.collapsed]="collapsed">
+    <div class="brand">
+      <button class="icon-btn" type="button" (click)="toggle()" aria-label="Toggle menu">
+        ☰
+      </button>
+      <div class="brand-text">AIMS</div>
+    </div>
+
+    <!--nav class="nav">
+      <a class="nav-item" routerLink="/home" routerLinkActive="active">
+        <span class="icon">🏠</span>
+        <span class="label">Home</span>
+      </a>
+
+      <a class="nav-item" routerLink="/standards" routerLinkActive="active">
+        <span class="icon">📚</span>
+        <span class="label">Standards</span>
+      </a>
+
+
+      <a class="nav-item" routerLink="/audits" routerLinkActive="active">
+        <span class="icon">📋</span>
+        <span class="label">Audits</span>
+      </a>
+
+      <a class="nav-item" routerLink="/reports" routerLinkActive="active">
+        <span class="icon">📈</span>
+        <span class="label">Reports</span>
+      </a>
+
+      <a class="nav-item" routerLink="/settings" routerLinkActive="active">
+        <span class="icon">⚙️</span>
+        <span class="label">Settings</span>
+      </a>
+    </nav-->
+    <nav class="nav">
+      <!-- Independent -->
+      <a class="nav-item" routerLink="/home" routerLinkActive="active">
+        <span class="icon">🏠</span>
+        <span class="label">Home</span>
+      </a>
+
+      <!-- Group -->
+      <div class="nav-group">
+        <div class="nav-group-title">Foundations</div>
+
+        <a class="nav-item" routerLink="/context-register" routerLinkActive="active">
+          <span class="icon">🗂️</span>
+          <span class="label">Context Register</span>
+        </a>
+
+        <a class="nav-item" routerLink="/standards" routerLinkActive="active">
+          <span class="icon">📚</span>
+          <span class="label">Standards</span>
+        </a>
+
+        <a class="nav-item" routerLink="/controls" routerLinkActive="active">
+          <span class="icon">✅</span>
+          <span class="label">Controls</span>
+        </a>
+
+        <a class="nav-item" routerLink="/implementations" routerLinkActive="active">
+          <span class="icon">🧩</span>
+          <span class="label">Implementations</span>
+        </a>
+
+        <a class="nav-item" routerLink="/audits" routerLinkActive="active">
+          <span class="icon">🧾</span>
+          <span class="label">Audits</span>
+        </a>
+
+        <a class="nav-item" routerLink="/reports" routerLinkActive="active">
+          <span class="icon">📈</span>
+          <span class="label">Reports</span>
+        </a>
+
+        <a class="nav-item" routerLink="/settings" routerLinkActive="active">
+          <span class="icon">⚙️</span>
+          <span class="label">Settings</span>
+        </a>
+      </div>
+    </nav>
+
+
+    <div class="spacer"></div>
+
+    <div class="bottom">
+      <a class="nav-item" routerLink="/logout">
+        <span class="icon">🚪</span>
+        <!--span class="label" *ngIf="!collapsed">Logout</span-->
+        <span class="label">Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="title">AIMS</div>
+      <!--div class="userbox">
+        <div class="user-meta">
+          <div class="user-name">{{ userDisplayName }}</div>
+          <div class="user-sub">
+            <span class="pill">{{ user.role }}</span>
+            <span class="dot">•</span>
+            <span class="loc">{{ user.location }}</span>
+          </div>
+        </div>
+
+        <div class="user-actions">
+          <button type="button" class="linkbtn" (click)="editProfile()">Edit</button>
+          <span class="sep">|</span>
+          <button type="button" class="linkbtn danger" (click)="logout()">Logout</button>
+        </div>
+      </div -->
+
+      <div class="user-area">
+        <button type="button" class="user-chip" (click)="toggleUserMenu()">
+          <span class="avatar">{{ userInitials }}</span>
+          <span class="name">{{ userDisplayName }}</span>
+          <span class="caret">▾</span>
+        </button>
+
+        <div class="user-pop" *ngIf="userMenuOpen">
+          <div class="user-pop-header">
+            <div class="avatar big">{{ userInitials }}</div>
+            <div class="meta">
+              <div class="full">{{ userDisplayName }}</div>
+              <div class="sub">{{ user.role }}</div>
+              <div class="sub">{{ user.location }}</div>
+            </div>
+          </div>
+
+          <div class="user-pop-actions">
+            <button type="button" class="pop-btn" (click)="editProfile()">Edit</button>
+            <button type="button" class="pop-btn danger" (click)="logout()">Logout</button>
+          </div>
+        </div>
+      </div>
+
+
+    </header>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="footer">© AIMS</footer>
+  </div>
+</div>

@@ -1,0 +1,345 @@
+<div class="page">
+  <div class="page-header">
+    <h2>Context Register</h2>
+  </div>
+
+  <div class="tabs">
+    <button
+      type="button"
+      class="tab"
+      [class.active]="activeTab === 'role'"
+      (click)="setTab('role')"
+    >
+      Role and Context
+    </button>
+
+    <button
+      type="button"
+      class="tab"
+      [class.active]="activeTab === 'parties'"
+      (click)="setTab('parties')"
+    >
+      Int Parties
+    </button>
+
+    <button
+      type="button"
+      class="tab"
+      [class.active]="activeTab === 'needs'"
+      (click)="setTab('needs')"
+    >
+      Needs and Exp
+    </button>
+
+    <button
+      type="button"
+      class="tab"
+      [class.active]="activeTab === 'issues'"
+      (click)="setTab('issues')"
+    >
+      Int and Ext issues
+    </button>
+  </div>
+
+  <div class="tab-body">
+    <div *ngIf="activeTab === 'role'">
+      <div class="tab-title-row">
+        <h3>Role and Context</h3>
+
+        <div class="actions">
+          <input class="search" type="text" [(ngModel)]="search" placeholder="Search..."/>
+          <button class="btn" type="button" (click)="openAddRole()">+ Add</button>
+        </div>
+      </div>
+
+      <div *ngIf="loading" class="hint">Loading...</div>
+      <div *ngIf="errorMsg" class="hint" style="color:#b00020">{{ errorMsg }}</div>
+
+
+      <div class="table-wrap" *ngIf="!loading">
+        <table class="table excel">
+          <thead>
+          <tr>
+            <th class="section-row">Aspect</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <ng-container *ngFor="let sec of filteredRoleSections">
+            <!-- SECTION ROW -->
+            <tr>
+              <td class="aspect-cell" colspan="2"> <!-- class="section-cell" -->
+                {{ sec.aspectName }}
+              </td>
+            </tr>
+
+            <!-- ITEM ROWS -->
+            <tr *ngFor="let item of sec.children">
+              <td>{{ item.aspectName }}</td> <!--class="aspect-cell"  class="desc-cell"-->
+              <!--td  class="desc-cell">{{ item.descriptionText }}</td -->
+
+              <td class="desc-cell">
+                <ng-container [ngSwitch]="(item.valueDisplayType || 'TEXT')">
+
+                  <!-- Multiline -->
+                  <textarea
+                    *ngSwitchCase="'TEXTAREA'"
+                    class="cell-textarea"
+                    [(ngModel)]="item.descriptionText"
+                    placeholder="Enter value..."
+                    (ngModelChange)="markDirty()"
+                  ></textarea>
+
+                  <!-- Number -->
+                  <input
+                    *ngSwitchCase="'NUMBER'"
+                    class="cell-input"
+                    type="number"
+                    [(ngModel)]="item.descriptionText"
+                    placeholder="Enter number..."
+                    (ngModelChange)="markDirty()"
+                  />
+
+                  <!-- Date -->
+                  <input
+                    *ngSwitchCase="'DATE'"
+                    class="cell-input"
+                    type="date"
+                    [(ngModel)]="item.descriptionText"
+                    (ngModelChange)="markDirty()"
+                  />
+
+                  <!-- DateTime -->
+                  <input
+                    *ngSwitchCase="'DATETIME'"
+                    class="cell-input"
+                    type="datetime-local"
+                    [(ngModel)]="item.descriptionText"
+                    (ngModelChange)="markDirty()"
+                  />
+
+                  <!-- Boolean -->
+                  <label *ngSwitchCase="'BOOLEAN'" class="bool-wrap">
+                    <input
+                      type="checkbox"
+                      [ngModel]="item.descriptionText === 'true'"
+                      (ngModelChange)="item.descriptionText = $event ? 'true' : 'false'"
+                      (ngModelChange)="markDirty()"
+                    />
+                    <span>{{ item.descriptionText === 'true' ? 'Yes' : 'No' }}</span>
+                  </label>
+
+                  <!-- JSON -->
+                  <textarea
+                    *ngSwitchCase="'JSON'"
+                    class="cell-textarea mono"
+                    [(ngModel)]="item.descriptionText"
+                    placeholder='{"key":"value"}'
+                    (ngModelChange)="markDirty()"
+                  ></textarea>
+
+                  <!-- SELECT (optional later if you send options) -->
+                  <select
+                    *ngSwitchCase="'SELECT'"
+                    class="cell-input"
+                    [(ngModel)]="item.descriptionText"
+                    (ngModelChange)="markDirty()"
+                  >
+                    <option value="" disabled>Select...</option>
+                    <option *ngFor="let opt of (item.options || [])" [value]="opt.value">
+                      {{ opt.label }}
+                    </option>
+                  </select>
+
+                  <!-- MAP -->
+
+                  <div *ngSwitchCase="'MAP'" class="map-cell" (click)="openMap(item)">
+                    <span class="map-value">{{ item.descriptionText || 'Click to set location' }}</span>
+                    <span class="map-pill">Map</span>
+                  </div>
+
+
+                  <!-- Default TEXT -->
+                  <input
+                    *ngSwitchDefault
+                    class="cell-input"
+                    type="text"
+                    [(ngModel)]="item.descriptionText"
+                    placeholder="Enter value..."
+                    (ngModelChange)="markDirty()"
+                  />
+
+                </ng-container>
+              </td>
+
+
+            </tr>
+          </ng-container>
+
+          <tr *ngIf="filteredRoleSections.length === 0">
+            <td colspan="2" class="empty">No matching rows.</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+    </div>
+
+
+    <div *ngIf="activeTab === 'parties'">
+      <h3>Interested Parties</h3>
+      <p>TODO: show Interested Parties table/form here.</p>
+    </div>
+
+    <div *ngIf="activeTab === 'needs'">
+      <h3>Needs and Expectations</h3>
+      <p>TODO: show Needs & Expectations table/form here.</p>
+    </div>
+
+    <div *ngIf="activeTab === 'issues'">
+      <h3>Internal and External Issues</h3>
+      <p>TODO: show Issues table/form here.</p>
+    </div>
+  </div>
+</div>
+
+<div class="map-backdrop" *ngIf="mapOpen" (click)="closeMap()"></div>
+
+<div class="map-modal" *ngIf="mapOpen">
+  <div class="map-modal-header">
+    <div class="map-title">{{ mapQuery }}</div>
+    <button type="button" class="btn secondary" (click)="closeMap()">Close</button>
+  </div>
+
+  <div id="leafletMap" class="map-canvas"></div>
+</div>
+
+<div class="savebar">
+  <div class="savebar-left">
+    <span *ngIf="saveMsg" class="hint">{{ saveMsg }}</span>
+    <span *ngIf="isDirty" class="dirty-dot">● Unsaved changes</span>
+  </div>
+
+  <div class="savebar-right">
+    <button type="button"
+            class="btn secondary"
+            [disabled]="!isDirty || saving"
+            (click)="cancelAll()">
+      Cancel
+    </button>
+
+    <button type="button"
+            class="btn"
+            [disabled]="!isDirty || saving"
+            (click)="saveAll()">
+      {{ saving ? 'Saving...' : 'Save' }}
+    </button>
+  </div>
+</div>
+
+<!-- Add role -->
+<!-- ADD MODAL -->
+<div class="modal-backdrop" *ngIf="addOpen" (click)="cancelAdd()"></div>
+
+<div class="modal" *ngIf="addOpen">
+  <div class="modal-header">
+    <div class="modal-title">Add Role & Context</div>
+    <button class="iconbtn" type="button" (click)="cancelAdd()">✕</button>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="form-row">
+      <label class="lbl">Section</label>
+      <select class="ctrl" [(ngModel)]="addForm.parentSectionId">
+        <option *ngFor="let s of roleSectionOptions" [ngValue]="s.id">
+          {{ s.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label class="lbl">Aspect</label>
+      <input class="ctrl" type="text" [(ngModel)]="addForm.aspectName" placeholder="e.g., Mission" />
+    </div>
+
+    <div class="form-row">
+      <label class="lbl">Value Type</label>
+      <select class="ctrl" [(ngModel)]="addForm.valueDisplayType">
+        <option value="TEXT">Text</option>
+        <option value="TEXTAREA">Long Text</option>
+        <option value="NUMBER">Number</option>
+        <option value="DATE">Date</option>
+        <option value="DATETIME">Date & Time</option>
+        <option value="BOOLEAN">Yes/No</option>
+        <option value="JSON">JSON</option>
+        <option value="MAP">Map</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label class="lbl">Value</label>
+
+      <ng-container [ngSwitch]="addForm.valueDisplayType">
+
+        <textarea *ngSwitchCase="'TEXTAREA'"
+                  class="ctrl ta"
+                  [(ngModel)]="addForm.value"
+                  placeholder="Enter value..."></textarea>
+
+        <input *ngSwitchCase="'NUMBER'"
+               class="ctrl"
+               type="number"
+               [(ngModel)]="addForm.value"
+               placeholder="Enter number..." />
+
+        <input *ngSwitchCase="'DATE'"
+               class="ctrl"
+               type="date"
+               [(ngModel)]="addForm.value" />
+
+        <input *ngSwitchCase="'DATETIME'"
+               class="ctrl"
+               type="datetime-local"
+               [(ngModel)]="addForm.value" />
+
+        <label *ngSwitchCase="'BOOLEAN'" class="bool-wrap">
+          <input type="checkbox"
+                 [ngModel]="addForm.value === 'true'"
+                 (ngModelChange)="addForm.value = $event ? 'true' : 'false'"/>
+          <span>{{ addForm.value === 'true' ? 'Yes' : 'No' }}</span>
+        </label>
+
+        <textarea *ngSwitchCase="'JSON'"
+                  class="ctrl ta mono"
+                  [(ngModel)]="addForm.value"
+                  placeholder='{"key":"value"}'></textarea>
+
+        <!-- MAP: reuse your map modal logic later; for now just open map picker -->
+        <div *ngSwitchCase="'MAP'" (click)="openMapForAdd()" class="map-cell" >
+          <span class="map-value">{{ addForm.value || 'Click to pick location' }}</span>
+          <span class="map-pill">Pick</span>
+        </div>
+
+        <input *ngSwitchDefault
+               class="ctrl"
+               type="text"
+               [(ngModel)]="addForm.value"
+               placeholder="Enter value..." />
+
+      </ng-container>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn secondary" (click)="cancelAdd()">Cancel</button>
+    <button type="button" class="btn"
+            [disabled]="!addForm.parentSectionId || !addForm.aspectName.trim()"
+            (click)="saveAdd()">
+      Save
+    </button>
+  </div>
+</div>
