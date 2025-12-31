@@ -7,4 +7,7 @@ import java.util.List;
 public interface AimsBasicService {
 
     public List<Section> getAvailableSection();
+
+    public String getContextRegisterDetails(Long contextRegisterId);
+
 }
